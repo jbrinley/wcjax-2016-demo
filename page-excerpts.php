@@ -50,10 +50,15 @@ class Page_Excerpts extends WP_Widget {
 				$title = '';
 			}
 			$title = apply_filters( 'widget_title', $title );
+			if ( $instance[ 'url' ] ) {
+				$url = $instance[ 'url' ];
+			} else {
+				$url = get_permalink();
+			}
 			echo $before_widget;
 			echo '<div class="post post-' . get_the_ID() . '">';
 			if ( $title ) {
-				echo $before_title . '<a href="' . get_permalink() . '">' . $title . '</a>' . $after_title;
+				echo $before_title . '<a href="' . $url . '">' . $title . '</a>' . $after_title;
 			}
 			echo '<div class="entry">';
 			the_excerpt();
@@ -68,11 +73,12 @@ class Page_Excerpts extends WP_Widget {
 		$instance = $old_instance;
 		$instance[ 'title' ] = $new_instance[ 'title' ];
 		$instance[ 'page_id' ] = (int)strip_tags( $new_instance[ 'page_id' ] );
+		$instance[ 'url' ] = $new_instance[ 'url' ];
 		return $instance;
 	}
 
 	function form( $instance ) {
-		$defaults = array( 'title' => '', 'page_id' => 0 );
+		$defaults = array( 'title' => '', 'page_id' => 0, 'url' => '' );
 		$instance = wp_parse_args( (array)$instance, $defaults );
 		?>
 		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>">Title:</label>
@@ -85,6 +91,11 @@ class Page_Excerpts extends WP_Widget {
 				'selected' => $instance[ 'page_id' ],
 				'name'     => $this->get_field_name( 'page_id' ),
 			) ); ?></p>
+		<p><label for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e( 'Url:' ); ?></label>
+			<input id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>"
+			       value="<?php echo esc_attr( $instance[ 'url' ] ); ?>" style="width: 98%"/>
+			<br/>
+			<small><?php _e( 'The widget title will link to this URL. Leave blank to link to the selected page.'); ?></small></p>
 		<?php
 	}
 }
