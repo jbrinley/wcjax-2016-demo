@@ -53,9 +53,11 @@ class Page_Excerpts extends WP_Widget {
 			echo $before_widget;
 			echo '<div class="post post-' . get_the_ID() . '">';
 			if ( $title ) {
+                echo "Title: ";
 				echo $before_title . '<a href="' . get_permalink() . '">' . $title . '</a>' . $after_title;
 			}
 			echo '<div class="entry">';
+            echo 'Excerpt: ';
 			the_excerpt();
 			echo '</div>';
 			echo '</div>';
