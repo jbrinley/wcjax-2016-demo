@@ -43,6 +43,13 @@ class Page_Excerpts extends WP_Widget {
 		) );
 		if ( $query->have_posts() ) {
 			$query->the_post();
+
+			// if we're on the "About" page, don't show this widget
+			$post = get_post();
+			if ( 'about' == $post->post_name ) {
+				return;
+			}
+
 			$title = $instance[ 'title' ];
 			if ( $title == '' ) {
 				$title = get_the_title();
