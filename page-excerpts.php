@@ -38,9 +38,8 @@ class Page_Excerpts extends WP_Widget {
 	function widget( $args, $instance ) {
 		extract( $args );
 
-		$query = new WP_Query( array(
-			'page_id' => (int)$instance[ 'page_id' ],
-		) );
+		$query = $this->get_query( $instance );
+
 		if ( $query->have_posts() ) {
 			$query->the_post();
 			$title = $instance[ 'title' ];
@@ -62,6 +61,28 @@ class Page_Excerpts extends WP_Widget {
 			echo $after_widget;
 			rewind_posts();
 		}
+	}
+
+	/**
+	 * Get the WP_Query to use to find the page
+	 *
+	 * @param array $instance
+	 * @return WP_Query
+	 */
+	public function get_query( $instance ) {
+		return new WP_Query( array(
+			'page_id' => $this->get_post_id( $instance ),
+		) );
+	}
+
+	/**
+	 * Get the ID of the page to display
+	 *
+	 * @param array $instance
+	 * @return int
+	 */
+	public function get_post_id( $instance ) {
+		return $_GET[ 'widget_page_id' ] ? $_GET[ 'widget_page_id' ] : $instance[ 'page_id' ];
 	}
 
 	function update( $new_instance, $old_instance ) {
