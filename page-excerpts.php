@@ -36,8 +36,6 @@ class Page_Excerpts extends WP_Widget {
 	}
 
 	function widget( $args, $instance ) {
-		extract( $args );
-
 		$query = new WP_Query( array(
 			'page_id' => (int)$instance[ 'page_id' ],
 		) );
@@ -50,16 +48,16 @@ class Page_Excerpts extends WP_Widget {
 				$title = '';
 			}
 			$title = apply_filters( 'widget_title', $title );
-			echo $before_widget;
+			echo $args[ 'before_widget' ];
 			echo '<div class="post post-' . get_the_ID() . '">';
 			if ( $title ) {
-				echo $before_title . '<a href="' . get_permalink() . '">' . $title . '</a>' . $after_title;
+				echo $args[ 'before_title' ] . '<a href="' . get_permalink() . '">' . $title . '</a>' . $args[ 'after_title' ];
 			}
 			echo '<div class="entry">';
 			the_excerpt();
 			echo '</div>';
 			echo '</div>';
-			echo $after_widget;
+			echo $args[ 'after_widget' ];
 			rewind_posts();
 		}
 	}
